@@ -10,17 +10,21 @@ app.use(express.json());
 
 // 🏦 建立資料庫連線池 (拿著你的金庫鑰匙)
 // 🚀 改裝二：建立資料庫連線池 (支援雲端環境變數動態讀取)
-// ☢️ 核彈級直連模式：直接寫死雲端金庫密碼
-const db = mysql.createPool({
-    host: 'yamabiko.proxy.rlwy.net',
-    user: 'root',
-    password: 'PsEObAZIVkoYyNlNwLpCNGmsTEEEkbga',
-    database: 'railway',
-    port: 10032,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+// 🚀 終極無腦連線法：讓程式自己去讀取 Railway 的萬能金鑰
+let db;
+
+if (process.env.MYSQL_URL) {
+    console.log('✨ 偵測到 Railway 萬能金鑰 (MYSQL_URL)，光速連線中...');
+    db = mysql.createPool(process.env.MYSQL_URL);
+} else {
+    console.log('🏠 找不到雲端金鑰，使用 Localhost 本地端連線...');
+    db = mysql.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: '12345678',
+        database: 'gu_pos'
+    });
+}
 // ============================================================================
 // 🏆 企業級效能怪獸：商品銷量最大堆積樹 (Max Heap 完全體)
 // ============================================================================
