@@ -11,13 +11,14 @@ app.use(express.json());
 // 🏦 建立資料庫連線池 (拿著你的金庫鑰匙)
 // 🚀 改裝二：建立資料庫連線池 (支援雲端環境變數動態讀取)
 const db = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '12345678',
-  database: process.env.DB_NAME || 'gu_pos',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '12345678',
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'gu_pos',
+    port: process.env.MYSQLPORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 // ============================================================================
 // 🏆 企業級效能怪獸：商品銷量最大堆積樹 (Max Heap 完全體)
